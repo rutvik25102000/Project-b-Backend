@@ -2,14 +2,10 @@ import mongoose from 'mongoose';
 
 // Define the food item schema
 const foodItemSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true ,unique: true},
+  name: { type: String, required: true, trim: true, unique: true },
   description: { type: String, required: true, trim: true },
   price: { type: Number, required: true },
-  category: {
-    type: String,
-    required: true,
-    enum: ['Appetizer', 'Main Course', 'Dessert', 'Beverage'],
-  },
+  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
   imageUrl: { type: String, required: false },
   ingredients: [{ type: String, required: true }],
   availability: { type: Boolean, default: true },

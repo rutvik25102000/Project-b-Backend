@@ -1,64 +1,88 @@
 import FoodItem from '../models/FoodItem.js';
-// Create a new food item
+import Category from "../models/FoodCategoriesModel.js";
+
+
+
 // export const createFoodItem = async (req, res) => {
 //     try {
-//       // Ensure that the image URL is included in the request body after file upload
+//       // Check if a file was uploaded
+//       if (!req.file) {
+//         return res.status(400).json({ msg: "Image upload is required" });
+//       }
+  
+//       // Construct the image URL
 //       const imageUrl = `/uploads/${req.file.filename}`;
   
-//       // Create a new food item with the image URL and other details
+//       // Ensure all required fields are provided
+//       const { name, description, price, category, foodType, preparationTime, availability, ingredients } = req.body;
+  
+//       if (!name || !description || !price || !category || !foodType || !preparationTime) {
+//         return res.status(400).json({ msg: "All fields are required" });
+//       }
+  
+//       // Parse ingredients as an array if it comes as a string
+//       const ingredientList = typeof ingredients === "string" ? ingredients.split(",") : ingredients;
+  
+//       // Create new food item
 //       const foodItem = new FoodItem({
-//         ...req.body,
-//         imageUrl,  // Add the imageUrl field here
+//         name,
+//         description,
+//         price,
+//         category,
+//         foodType,
+//         preparationTime,
+//         availability: availability === "true", // Convert string to boolean
+//         ingredients: ingredientList,
+//         imageUrl,
+//         user: req.user.id, // Assuming user ID is stored in req.user from auth middleware
 //       });
   
-//       // Save the food item to the database
+//       // Save food item to database
 //       await foodItem.save();
   
 //       return res.status(201).json({
-//         msg: 'Food item is saved successfully',
-//         foodItem, // Optionally, send the created food item in the response
+//         msg: "Food item added successfully",
+//         foodItem,
 //       });
 //     } catch (error) {
-//       return res.status(404).json({
-//         message: error.message,
-//       });
+//       return res.status(500).json({ msg: "Server error", error: error.message });
 //     }
 //   };
+// Get all food items
 export const createFoodItem = async (req, res) => {
     try {
-      // Check if a file was uploaded
       if (!req.file) {
         return res.status(400).json({ msg: "Image upload is required" });
       }
   
-      // Construct the image URL
       const imageUrl = `/uploads/${req.file.filename}`;
-  
-      // Ensure all required fields are provided
       const { name, description, price, category, foodType, preparationTime, availability, ingredients } = req.body;
   
       if (!name || !description || !price || !category || !foodType || !preparationTime) {
         return res.status(400).json({ msg: "All fields are required" });
       }
   
-      // Parse ingredients as an array if it comes as a string
+      // Check if the category exists
+      const existingCategory = await Category.findById(category);
+      if (!existingCategory) {
+        return res.status(400).json({ msg: "Invalid category ID" });
+      }
+  
       const ingredientList = typeof ingredients === "string" ? ingredients.split(",") : ingredients;
   
-      // Create new food item
       const foodItem = new FoodItem({
         name,
         description,
         price,
-        category,
+        category, 
         foodType,
         preparationTime,
-        availability: availability === "true", // Convert string to boolean
+        availability: availability === "true",
         ingredients: ingredientList,
         imageUrl,
-        user: req.user.id, // Assuming user ID is stored in req.user from auth middleware
+        user: req.user.id,
       });
   
-      // Save food item to database
       await foodItem.save();
   
       return res.status(201).json({
@@ -69,7 +93,6 @@ export const createFoodItem = async (req, res) => {
       return res.status(500).json({ msg: "Server error", error: error.message });
     }
   };
-// Get all food items
 export const getAllFoodItems = async (req, res) => {
   try {
     const foodItems = await FoodItem.find();

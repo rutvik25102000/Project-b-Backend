@@ -4,6 +4,7 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import authRoutes from './routes/userRoutes.js'
 import foodRoutes from './routes/foodRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 dotenv.config();
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use('/uploads', express.static("uploads"));
 app.use('/api/auth',authRoutes);
 app.use('/api/fooditem',foodRoutes);
+app.use('/api/categories', categoryRoutes);
 
 const PORT = process.env.PORT ||5000 ;
 connectDB().then(() => {
