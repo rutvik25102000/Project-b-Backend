@@ -44,7 +44,7 @@ export const login = async (req, res) => {
   
       res.json({ 
         msg: 'Login successful',
-        token: `Bearer ${token}`,  // Adding "Bearer " prefix
+        token,  // Adding "Bearer " prefix
         user: { id: user._id, name: user.name, email: user.email, role: user.role } 
       });
     } catch (error) {
