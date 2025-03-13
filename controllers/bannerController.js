@@ -112,3 +112,25 @@ export const updateBannerById = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
+
+export const updateBannerStatus = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const { status } = req.body;
+
+      if (!["active", "inactive"].includes(status)) {
+          return res.status(400).json({ message: "Invalid status value" });
+      }
+
+      const banner = await Banner.findByIdAndUpdate(id, { status }, { new: true });
+
+      if (!banner) {
+          return res.status(404).json({ message: "Banner not found" });
+      }
+
+      res.status(200).json({ message: "Status updated successfully", banner });
+  } catch (error) {
+      res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
