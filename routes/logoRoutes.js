@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.post("/upload", authenticate, upload.single("image"), uploadLogo);
 router.get("/active/:usageType", getActiveLogo);
-router.get("/all", authenticate, getAllLogos);
+router.get("/all",  getAllLogos);
 router.get("/:id", authenticate, getLogoById);
 router.put("/update-logo/:id", authenticate, upload.single("image"), updateLogo);
 router.put("/update-status/:id", authenticate, updateLogoStatus);

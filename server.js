@@ -7,6 +7,8 @@ import foodRoutes from './routes/foodRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import bannerRoutes from "./routes/bannerRoutes.js";
 import logo from './routes/logoRoutes.js';
+import authgmailRoutes from './routes/authRoutes.js';
+
 dotenv.config();
 const app = express();
 
@@ -14,6 +16,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static("uploads"));
 app.use('/api/auth',authRoutes);
+app.use('/api/authgmail',authgmailRoutes);
+
 app.use('/api/fooditem',foodRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use("/api/banners", bannerRoutes);
